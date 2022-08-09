@@ -2,29 +2,78 @@
 #define MAIN_H
 
 #include <stdarg.h>
-int _putchar(char c);
-int _printf(const char *format, ...);
-int print_char(va_list c);
-int print_string(va_list s);
-int print_int(va_list i);
-int print_dec(va_list d);
-int print_rev(va_list r);
-int print_bin(va_list b);
-int print_unsig(va_list u);
-int print_octal(va_list o);
-int print_x(va_list x);
-int print_X(va_list X);
-int print_rot13(va_list R);
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+#include <unistd.h>
+
+#define BUF_SIZE 1024
+#define BUF_FLUSH -1
+
+#define FLAGS_INIT {0, 0, 0, 0, 0}
+
 /**
-  * struct code_format - Struct format
-  *
-  * @sc: The specifiers
-  * @f: The function associated
-  */
-typedef struct code_format
+ * struct flags - flags on / off
+ * when used with a printf command
+ * @plusf: on if plus_flag specified
+ * @spacef: on if hashtag_flag specified
+ * @hashtagf: on if _flag specified
+ * @hmod: on if h_modifier is specified
+ * @lmod: on if l_modifier is specified
+ *
+ */
+typedef struct flags
 {
-	char *sc;
-	int (*f)(va_list);
-} code_f;
+	unsigned int plusf;
+	unsigned int spacef;
+	unsigned int hashtagf;
+	unsigned int hmod;
+	unsigned int lmod;
+} flags_t;
+
+/**
+ * struct specifier - Struct
+ * @spec: specifier
+ * @f: pointer to the function
+ */
+typedef struct specifier
+{
+	char spec;
+	int (*f)(va_list ap, flags_t *f);
+} specType;
+
+/* _put.c module */
+int _puts(char *str);
+int _putchar(int c);
+
+/* _prinf.c module */
+int _printf(const char *format, ...);
+
+/* get_print.c module */
+int (*getPrint(char s))(va_list, flags_t *);
+int getFlags(char s, flags_t *f);
+int getModifier(char s, flags_t *f);
+
+/* printAlpha.c module */
+int printStr(va_list ap, flags_t *f);
+int printChar(va_list ap, flags_t *f);
+int printModulo(va_list ap, flags_t *f);
+
+/* printNum.c module */
+int printInt(va_list ap, flags_t *f);
+int printUnsigned(va_list ap, flags_t *f);
+char *convert(unsigned long int num, int base, int lowercase);
+
+/* printBases.c module */
+int printBinary(va_list ap, flags_t *f);
+int printHexL(va_list ap, flags_t *f);
+int printHexU(va_list ap, flags_t *f);
+int printOctal(va_list ap, flags_t *f);
+int printAddr(va_list ap, flags_t *f);
+
+/* printAlpha_2.c module */
+int printReverse(va_list ap, flags_t *f);
+int printRot13(va_list ap, flags_t *f);
+int printS(va_list ap, flags_t *f);
 
 #endif
