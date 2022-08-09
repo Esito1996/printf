@@ -1,50 +1,52 @@
 #include "main.h"
 
 /**
- * _printf - prints formatted data to stdout
- * @format: string that contains the format to print
- * Return: number of characters written
+ * _printf - prints
+ * @format: the first parameter
+ *
+ * Return: number of printed char
  */
-int _printf(char *format, ...)
-{
-	int written = 0, (*structype)(char *, va_list);
-	char q[3];
-	va_list pa;
 
-	if (format == NULL)
+int _printf(const char *format, ...)
+{
+	char *ptr, *start;
+
+	flags_t fgs = FLAGS_INIT;
+	int cp = 0;
+	int (*pF)(va_list, flags_t *);
+	va_list ap;
+
+	va_start(ap, format);
+	if (!format || (format[0] == '%' && !format[1]))
 		return (-1);
-	q[2] = '\0';
-	va_start(pa, format);
-	_putchar(-1);
-	while (format[0])
+	if (format[0] == '%' && format[1] == ' ' && !format[2])
+		return (-1);
+	for (ptr = (char *)format; *ptr; ptr++)
 	{
-		if (format[0] == '%')
+		if (*ptr == '%')
 		{
-			structype = driver(format);
-			if (structype)
+			ptr++;
+			if (*ptr == '%')
 			{
-				q[0] = '%';
-				q[1] = format[1];
-				written += structype(q, pa);
+				cp += _putchar(*ptr);
+				continue;
 			}
-			else if (format[1] != '\0')
+			start = ptr;
+			while (getFlags(*ptr, &fgs))
+				ptr++;
+			pF = getPrint(*ptr);
+			if (!pF)
 			{
-				written += _putchar('%');
-				written += _putchar(format[1]);
+				cp += _putchar('%');
+				ptr = start - 1;
 			}
 			else
-			{
-				written += _putchar('%');
-				break;
-			}
-			format += 2;
+				cp += pF(ap, &fgs);
 		}
 		else
-		{
-			written += _putchar(format[0]);
-			format++;
-		}
+			cp += _putchar(*ptr);
 	}
-	_putchar(-2);
-	return (written);
+	_putchar(BUF_FLUSH);
+	va_end(ap);
+	return (cp);
 }
