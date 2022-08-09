@@ -1,76 +1,35 @@
-.TH man 3 "25 October 2020" "0.1" "Homemade _printf function"
+.TH _PRINTF "1" "29 October 2019" "0x11" "_printf man page"
 .SH NAME
-.B _printf
-- implement _printf function (almost) from scratch
+_printf - print data and format
 .SH SYNOPSIS
-.B _printf()
-- a Holberton school project 'Write your own printf function' with standard library.
+.B printf FORMAT [ARGUMENT]...
 .SH DESCRIPTION
-The function _printf produces a string according to a
-.I format
-to the standard output.
-It can receive a variable number of arguments, thanks to variadic function.
-Produced with our current technical skills, within limited time.
-.SH OPTIONS
-.B %c
-- prints a character
-.br
-.B %s
-- prints a string
-.br
-.B %%
-- prints a %
-.br
-.B  %d, %i
-- prints an integer
-.br
-.B %o, %b
-- respectively print a number in
-.I octal
-and
-.I binary
-base.
-.br
-.B %x, %X
-- respecively print a number in
-. I lowercase
-and
-. I uppercase
-hexadecimal base.
-.br
-.B %u
-- prints an unsigned integer
-.br
-.B %S
-- handles non-printable characters: \\x, followed by the ASCII code value in uppercase hexadecimal.
-.br
-.B %p
-- prints an address, given by a pointer variable
-.br
-.B %r
-- prints a string in reverse
-.br
-.B %R
-- prints a string in rot13 encryption
-.br
-.sp
-.B Flag characters for conversion specifiers
-.sp
-.B +
-- prints a '+' sign in front of positive integers and a '-' sign in front of negative integers. + overrides a space when both flags are given.
-.sp
-.B ' '
-- prints a space in front of signed integers.
-.sp
-.B #
-- modifier for o, x and X. For x, adds \(dq0x\(dq, and for X, adds \(dq0X\(dq in front of the number. For o, if the converted number doesn't already begin with a 0, adds a 0.
-.sp
-.br
+Prints ARGUMENT(s) based on FORMAT
+
+If format includes format specifiers (subsequences beginning with %), the additional arguments following format are formatted and inserted in the resulting string replacing their respective specifiers.
+
+_printf will also take an indefinite amount of arguments.
+
+Example:
+_printf("%s", text);
+
+In the Example print the value of text with %s give the format of text.
+
+.B The conversion specifiers
+
+.IP %c
+- prints character.
+.IP %s
+- prints string.
+.IP %%
+- prints percentage symbol.
+.IP %d
+- prints decimal.
+.IP %i
+- prints integer number.
+
 .SH SEE ALSO
-.I _putchar.c
-.SH NOTES
-_printf uses a function called _putchar, that uses the system call write().
-.SH BUGS
-Working on removing bugs.
+.I printf (3)
 .SH AUTHOR
-esrom , hani
+Camilo Baquero www.camilob.com
+Camilo Bayona www.camilobayona.com
